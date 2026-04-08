@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Chatbot</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 400px;
+            background: #2c2c2c;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 5px;
+        }
+
+        .message {
+            margin: 5px 0;
+        }
+
+        .user {
+            text-align: right;
+            color: #4fc3f7;
+        }
+
+        .bot {
+            text-align: left;
+            color: #81c784;
+        }
+
+        .input-area {
+            display: flex;
+        }
+
+        input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            margin-left: 5px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            background: #4fc3f7;
+            color: black;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #29b6f6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <h2>Chatbot</h2>
+
+    <div id="chat-box" class="chat-box"></div>
+
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function sendMessage() {
+        const inputField = document.getElementById("user-input");
+        const message = inputField.value;
+        const chatBox = document.getElementById("chat-box");
+
+        if (message.trim() === "") return;
+
+        // User message
+        chatBox.innerHTML += `<div class="message user">You: ${message}</div>`;
+
+        // Typing indicator
+        const typingId = "typing-" + Date.now();
+        chatBox.innerHTML += `<div class="message bot" id="${typingId}">Bot is typing...</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Delay (UX effect)
+        await delay(500);
+
+        // API call
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+
+        // Replace typing with actual response
+        document.getElementById(typingId).innerHTML = `Bot: ${data.response}`;
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+        inputField.value = "";
+    }
+
+    // Enter key support
+    document.getElementById("user-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
