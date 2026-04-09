@@ -2,6 +2,12 @@
 
 A smart chatbot built with Python and Flask, featuring machine learning-based intent detection, conversation memory, and support for composed messages.
 
+## Project Overview
+
+This project is an AI-powered chatbot that uses intent classification to understand user input and generate appropriate responses.
+
+It demonstrates how machine learning can be used to build interactive applications, including message processing, response selection, and maintaining a conversational flow through a Flask web interface.
+
 ## Features
 
 - ML-based intent classification (scikit-learn)
