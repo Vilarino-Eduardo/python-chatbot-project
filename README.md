@@ -86,6 +86,8 @@ python-chatbot-project/
 - User authentication
 - API deployment
 
-## Author
+## Example Output
 
-Built as part of a Python + AI portfolio project.
+Example conversation from the chatbot interface:
+
+![Chatbot Example](images/chatbot-example.png)
